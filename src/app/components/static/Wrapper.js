@@ -24,6 +24,7 @@ class Wrapper extends Component {
             </div>
         );
     }
+
 }
 
 export default Wrapper;

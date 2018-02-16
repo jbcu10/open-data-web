@@ -8,97 +8,111 @@ class CommodityChart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: []
+            items: [],
+            query:'',
+            data:{x: 'x',
+                xFormat: '%m-%d-%y',
+                type: 'bar',
+                columns:[]},
+            colors: {
+                data1: '#ff0000',
+                data2: '#00ff00',
+                data3: '#0000ff'
+            },
+            axis:{
+                x: {
+                    type: 'timeseries',
+                 }}
         };
-
+    this.renderSubComponent = this.renderSubComponent.bind(this);
     }
-    componentDidMount() {
-        axios.get(`https://opendata.pantabangan.com/api/society/csv?file=damarketprices2013.csv&key=commodity&value=rice`)
+
+    renderSubComponent = (q) => {
+
+            axios.get(`http://localhost:8080/api/society/csv?file=damarketprices2013.csv&key=commodity&value=${q}`)
             .then(res => {
                 const items = res.data;
-                this.setState({items});
-            });
-    }
-
-    render() {
-        let header = ['Month'];
-        let date = ['x'];
-        let commodities = [];
-        let columns = [];
-        let dateArray = [];
-        let array = [];
-        let commodityArray = [];
-        try {
 
 
-            this.state.items.forEach((item) => {
-                array.push(item.market)
-                dateArray.push(item.date)
-                commodityArray.push(item.name.toLowerCase());
-            });
-            new Set(array).forEach(a => {
-                header.push(a);
-            });
+                let header = ['Month'];
+                let date = ['x'];
+                let commodities = [];
+                let columns = [];
+                let dateArray = [];
+                let array = [];
+                let commodityArray = [];
+                try {
 
-            let dateString = [];
-            new Set(dateArray).forEach(data => {
-                dateString.push(data);
-                date.push(moment(data).toDate());
-            });
-            new Set(commodityArray).forEach(commodity => {
-                commodities.push(commodity);
-            });
 
-            let newArray = [];
-            commodities.forEach((value) => {
-                let comArray = [];
-                comArray.push(value);
-                for (let a = 1; a < dateString.length; a++) {
-                    let price = 0;
-                    this.state.items.forEach((item) => {
-                        if (item.name.toLowerCase() === value && dateString[a] === item.date) {
+                     items.forEach((item) => {
+                        array.push(item.market)
+                        dateArray.push(item.date)
+                        commodityArray.push(item.name.toLowerCase());
+                    });
+                    new Set(array).forEach(a => {
+                        header.push(a);
+                    });
 
-                            price = price > item.price ? price : item.price;
+                    let dateString = [];
+                    new Set(dateArray).forEach(data => {
+                        dateString.push(data);
+                        date.push(moment(data).toDate());
+                    });
+                    new Set(commodityArray).forEach(commodity => {
+                        commodities.push(commodity);
+                    });
+
+                    let newArray = [];
+                    commodities.forEach((value) => {
+                        let comArray = [];
+                        comArray.push(value);
+                        for (let a = 1; a < dateString.length; a++) {
+                            let price = 0;
+                             items.forEach((item) => {
+                                if (item.name.toLowerCase() === value && dateString[a] === item.date) {
+
+                                    price = price > item.price ? price : item.price;
+                                }
+
+
+                            });
+                            comArray.push(price);
+
                         }
-
+                        newArray.push(comArray)
 
                     });
-                    comArray.push(price);
+
+
+                    columns.push(date);
+                    newArray.forEach((item) => {
+                        columns.push(item);
+                    })
 
                 }
-                newArray.push(comArray)
+                catch (e) {
+                    console.log(e);
+                }
+               const  data = {
+                    columns: columns,
+
+                };
+
+                this.setState({data});
 
             });
 
 
-            columns.push(date);
-            newArray.forEach((item) => {
-                columns.push(item);
-            })
-          //  console.log(columns);
+    };
 
-        }
-        catch (e) {
-            console.log(e);
-        }
-        const data = {
-            columns: columns,
-            x: 'x',
-            xFormat: '%m-%d-%y',
-            type: 'bar'
-        };
-        const axis = {
-
-            x: {
-                type: 'timeseries',
-                tick: {}
-            }
-
-        };
+    componentDidMount() {
+        this.renderSubComponent(this.props.commodity);
+    }
+    render() {
 
         return (
-            <C3Chart data={data} axis={axis}/>
-        );
+                 <C3Chart data={this.state.data} axis={this.state.axis} unloadBeforeLoad={true}/>
+         );
     }
 }
 
