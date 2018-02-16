@@ -7,7 +7,7 @@ class Commodity extends Component {
 
 
     renderSubComponent = () => {
-        console.log(this.props.component);
+        //console.log(this.props.component);
         if (this.props.component === 'CHART') {
             return <CommodityChart commodity=""/>;
         }if (this.props.component === 'TABLE') {

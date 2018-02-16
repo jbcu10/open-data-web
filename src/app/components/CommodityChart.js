@@ -75,7 +75,7 @@ class CommodityChart extends Component {
             newArray.forEach((item) => {
                 columns.push(item);
             })
-            console.log(columns);
+          //  console.log(columns);
 
         }
         catch (e) {
@@ -94,7 +94,7 @@ class CommodityChart extends Component {
                 tick: {}
             }
 
-        }
+        };
 
         return (
             <C3Chart data={data} axis={axis}/>
