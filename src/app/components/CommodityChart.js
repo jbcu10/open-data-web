@@ -13,7 +13,7 @@ class CommodityChart extends Component {
 
     }
     componentDidMount() {
-        axios.get(`http://localhost:8080/api/society/csv?file=damarketprices2013.csv&key=commodity&value=rice`)
+        axios.get(`http://35.198.206.11:8080/api/society/csv?file=damarketprices2013.csv&key=commodity&value=rice`)
             .then(res => {
                 const items = res.data;
                 this.setState({items});
