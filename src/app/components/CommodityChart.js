@@ -28,8 +28,8 @@ class CommodityChart extends Component {
     }
 
     renderSubComponent = (q) => {
-
-            axios.get(`${window.location.hostname}/api/society/csv?file=damarketprices2013.csv&key=commodity&value=${q}`)
+            const host = 'https://opendata.pantabangan.com';
+            axios.get(`${host}/api/society/csv?file=damarketprices2013.csv&key=commodity&value=${q}`)
             .then(res => {
                 const items = res.data;
 

@@ -13,7 +13,9 @@ class CommodityTable extends Component {
     }
 
     componentDidMount() {
-        axios.get(`${window.location.hostname}/api/society/csv?file=damarketprices2013.csv&key=commodity&value=${this.props.commodity}`)
+        const host = 'https://opendata.pantabangan.com';
+
+        axios.get(`${host}/api/society/csv?file=damarketprices2013.csv&key=commodity&value=${this.props.commodity}`)
             .then(res => {
                 const items = res.data;
                 this.setState({items});

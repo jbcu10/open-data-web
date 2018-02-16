@@ -23,7 +23,9 @@ class CommodityChartWrapper extends Component {
     }
 
     componentDidMount() {
-        axios.get(`${window.location.hostname}/api/society/commodity`)
+        const host = 'https://opendata.pantabangan.com';
+
+        axios.get(`${host}/api/society/commodity`)
             .then(res => {
                 const options = res.data.map((data) => {
                     return new Object({
