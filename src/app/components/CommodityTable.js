@@ -1,9 +1,9 @@
-import React from 'react';
+import React,{Component} from 'react';
 import axios from 'axios';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 
-class FetchCommodity extends React.Component {
+class CommodityTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,8 +21,6 @@ class FetchCommodity extends React.Component {
     }
 
     render() {
-        const com = this.props.commodity ? `Commodity - ${this.props.commodity}` : 'All Commodities';
-        console.log(com);
         const options = {
             page: 1,  // which page you want to show as default
             sizePerPageList: [
@@ -30,6 +28,10 @@ class FetchCommodity extends React.Component {
                     text: '10', value: 10
                 }, {
                     text: '25', value: 25
+                },{
+                    text: '50', value: 50
+                },{
+                    text: '100', value: 100
                 }, {
                     text: 'All', value: this.state.items.length
                 }], // you can change the dropdown list for size per page
@@ -47,7 +49,7 @@ class FetchCommodity extends React.Component {
             // withFirstAndLast: false > Hide the going to First and Last page button
         };
         return (
-            <BootstrapTable data={this.state.items} striped exportCSV exportPDF hover pagination={true}
+            <BootstrapTable data={this.state.items} striped  search exportCSV exportPDF hover pagination={true}
                             options={options}>
                 <TableHeaderColumn isKey hidden={true} dataField='id' dataSort={true}>Product ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='date' dataSort={true}>Date</TableHeaderColumn>
@@ -55,17 +57,9 @@ class FetchCommodity extends React.Component {
                 <TableHeaderColumn dataField='market' dataSort={true}>Market Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='price' dataSort={true}>Product Price</TableHeaderColumn>
             </BootstrapTable>
-            /* <div>
-                 <h1>{`${com}`}</h1>
-                 <table>
-                     <tbody>
-                     {this.state.items.map( (item, index)=> <tr  key={index}><td> {item.date}</td><td> {item.market}</td><td> {item.commodity} </td><td> {item.price}</td></tr>)}
-                     </tbody>
-                 </table>
 
-             </div>*/
         );
     }
 }
 
-export default FetchCommodity;
+export default CommodityTable;
